@@ -76,9 +76,10 @@ const locateMe = function () {
       coords = [latitude.toFixed(2), longitude.toFixed(2)];
       console.log(coords);
       whereAmI(coords[0], coords[1]);
+      btn.removeEventListener('click', locateMe);
     },
     function () {
-      console.log('could not get current location');
+      throw new Error('Could not get current location');
     }
   );
 };
@@ -113,4 +114,4 @@ const whereAmI = function (lat, lng) {
     });
 };
 
-locateMe();
+btn.addEventListener('click', locateMe);
