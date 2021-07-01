@@ -66,14 +66,12 @@ btn.addEventListener('click', function () {
 */
 
 /////////// CHALLENGE 1 ///////////
-let coords = [];
-
 const locateMe = function () {
   navigator.geolocation.getCurrentPosition(
     function (position) {
       const { latitude } = position.coords;
       const { longitude } = position.coords;
-      coords = [latitude.toFixed(2), longitude.toFixed(2)];
+      const coords = [latitude.toFixed(2), longitude.toFixed(2)];
       console.log(coords);
       whereAmI(coords[0], coords[1]);
       btn.removeEventListener('click', locateMe);
