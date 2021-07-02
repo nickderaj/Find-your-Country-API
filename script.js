@@ -257,6 +257,7 @@ createImage('img/img-1.jpg')
 //       const html = `<img class="country__img" src="${image}" />`
 // countriesContainer.insertAdjacentHTML('beforeend', html);
 */
+//////////// ASYNC AND AWAIT METHOD ////////////////////
 
 const getPosition = function () {
   return new Promise(function (resolve, reject) {
@@ -265,21 +266,36 @@ const getPosition = function () {
 };
 
 const whereAmI = async function () {
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
-  const resGeo = await fetch(
-    `https://geocode.xyz/${lat},${lng}?geoit=json&auth=110098686723014e15740532x43974 `
-  );
-  const dataGeo = await resGeo.json();
-  const res = await fetch(
-    `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
-  );
-  const data = await res.json();
-  console.log(data);
-  renderCountry(data[0]);
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    const resGeo = await fetch(
+      `https://geocode.xyz/${lat},${lng}?geoit=json&auth=110098686723014e15740532x43974 `
+    );
+    if (!resGeo.ok) throw new Error('Problem getting location data');
+    const dataGeo = await resGeo.json();
+    const res = await fetch(
+      `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+    );
+    if (!res.ok) throw new Error('Problem getting country');
+    const data = await res.json();
+    console.log(data);
+    renderCountry(data[0]);
+  } catch (err) {
+    console.error(`${err} 💥`);
+    renderError(`Something went wrong 💛🦢 ${err.message}`);
+  }
 };
 
 btn.addEventListener('click', whereAmI);
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (err) {
+//   alert(err.message);
+// }
 
 // fetch(
 //     `https://geocode.xyz/${lat},${lng}?geoit=json&auth=110098686723014e15740532x43974 `
